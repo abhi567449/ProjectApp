@@ -1,0 +1,22 @@
+export default {
+  
+  config() {
+    return {
+      name: "my-sst-app",
+      region: "us-east-1" // Required for AWS resources
+    };
+  },
+  async run() {
+    await import("./infra/api");
+    await import("./infra/storage");
+    await import("./infra/frontend");
+    const auth = await import("./infra/auth");
+
+    return {
+      UserPool: auth.userPool.id,
+      Region: aws.getRegionOutput().name,
+      IdentityPool: auth.identityPool.id,
+      UserPoolClient: auth.userPoolClient.id,
+    };
+  }
+}
